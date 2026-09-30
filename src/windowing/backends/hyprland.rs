@@ -8,6 +8,7 @@ use std::fs;
 use std::os::unix::fs::{FileTypeExt, MetadataExt};
 use std::path::{Path, PathBuf};
 use std::process::Command as StdCommand;
+use std::sync::OnceLock;
 use std::time::SystemTime;
 use tokio::process::Command;
 
@@ -220,24 +221,110 @@ fn windows_from_hyprland_clients(clients: Vec<HyprlandClient>) -> Result<Vec<Win
 
 pub async fn activate_window(window_id: u64) -> Result<()> {
     let address = format!("address:0x{window_id:x}");
-    let lua_dispatch = lua_focus_dispatch(&address);
-    let lua_output = hyprctl_output_async(&["dispatch", &lua_dispatch])
-        .await
-        .with_context(|| format!("failed to run Hyprland Lua focus dispatcher for {address}"))?;
-    if dispatch_succeeded(&lua_output) {
-        return Ok(());
+    let mut attempts: Vec<String> = Vec::new();
+
+    // Strategy 1: Lua dispatcher -- only when the Hyprland IPC hl global is
+    // the API table. Hyprland 0.56.2 ships hl as boolean true, so the Lua
+    // dispatcher is unusable there and must be skipped outright.
+    if hl_lua_table_available() {
+        let lua_dispatch = lua_focus_dispatch(&address);
+        match hyprctl_output_async(&["dispatch", &lua_dispatch]).await {
+            Ok(lua_output) if dispatch_succeeded(&lua_output) => return Ok(()),
+            Ok(lua_output) => attempts.push(format!(
+                "Lua dispatcher rejected: {}",
+                command_detail(&lua_output)
+            )),
+            Err(error) => attempts.push(format!("Lua dispatcher failed to run: {error:#}")),
+        }
+    } else {
+        attempts.push(
+            "Lua dispatcher skipped: hl is not a table (Hyprland 0.56.2)".to_string(),
+        );
     }
 
+    // Strategy 2: wlrctl -- Wayland-native toplevel focus by app-id, resolved
+    // from hyprctl clients -j. Independent of hyprctl dispatch entirely.
+    match resolve_app_id(window_id).await {
+        Ok(Some(app_id)) => match wlrctl_focus(&app_id).await {
+            Ok(()) => return Ok(()),
+            Err(error) => attempts.push(format!("wlrctl toplevel focus {app_id}: {error:#}")),
+        },
+        Ok(None) => attempts.push("wlrctl skipped: no app-id for window".to_string()),
+        Err(error) => attempts.push(format!("wlrctl skipped: app-id lookup failed: {error:#}")),
+    }
+
+    // Strategy 3: legacy hyprctl focuswindow dispatch.
     let legacy_output = hyprctl_output_async(&["dispatch", "focuswindow", &address])
         .await
         .with_context(|| format!("failed to run hyprctl dispatch focuswindow {address}"))?;
     if dispatch_succeeded(&legacy_output) {
+        return Ok(());
+    }
+    attempts.push(format!(
+        "legacy dispatcher rejected: {}",
+        command_detail(&legacy_output)
+    ));
+
+    bail!(
+        "Hyprland window focus failed for {address}; {}",
+        attempts.join("; ")
+    );
+}
+
+// Cached probe: is the Hyprland IPC Lua hl global the API table?
+// hyprctl repl 'type(hl)' prints table on healthy builds.
+static HL_LUA_TABLE: OnceLock<bool> = OnceLock::new();
+
+fn hl_lua_table_available() -> bool {
+    *HL_LUA_TABLE.get_or_init(|| match hyprctl_output(&["repl", "type(hl)"]) {
+        Ok(output) if output.status.success() => {
+            hl_repl_reports_table(&String::from_utf8_lossy(&output.stdout))
+        }
+        _ => false,
+    })
+}
+
+fn hl_repl_reports_table(stdout: &str) -> bool {
+    stdout.trim() == "table"
+}
+
+// Resolve the Wayland app-id (Hyprland class) for a window id.
+async fn resolve_app_id(window_id: u64) -> Result<Option<String>> {
+    let output = hyprctl_output_async(&["clients", "-j"])
+        .await
+        .context("failed to run hyprctl clients -j for app-id lookup")?;
+    if !output.status.success() {
+        bail!(
+            "hyprctl clients -j failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        );
+    }
+    let clients: Vec<HyprlandClient> =
+        serde_json::from_slice(&output.stdout).context("failed to parse hyprctl clients -j")?;
+    Ok(class_for_window_id(&clients, window_id))
+}
+
+fn class_for_window_id(clients: &[HyprlandClient], window_id: u64) -> Option<String> {
+    clients.iter().find_map(|client| match parse_hyprland_address(&client.address) {
+        Ok(id) if id == window_id => client.class_name.clone(),
+        _ => None,
+    })
+}
+
+// Focus a toplevel by app-id via wlrctl (Wayland-native, no hyprctl dispatch).
+async fn wlrctl_focus(app_id: &str) -> Result<()> {
+    let mut command = Command::new("wlrctl");
+    command.args(["toplevel", "focus", app_id]);
+    let output = command_runner::output(command, "run wlrctl toplevel focus")
+        .await
+        .context("failed to run wlrctl")?;
+    if output.status.success() {
         Ok(())
     } else {
         bail!(
-            "Hyprland window focus failed for {address}; Lua dispatcher: {}; legacy dispatcher: {}",
-            command_detail(&lua_output),
-            command_detail(&legacy_output)
+            "wlrctl exited {}: {}",
+            output.status,
+            command_detail(&output)
         );
     }
 }
@@ -566,6 +653,40 @@ mod tests {
         };
 
         assert!(dispatch_succeeded(&output));
+    }
+
+    #[test]
+    fn hl_repl_table_detection() {
+        assert!(hl_repl_reports_table("table
+"));
+        assert!(hl_repl_reports_table("  table  "));
+        assert!(!hl_repl_reports_table("boolean
+"));
+        assert!(!hl_repl_reports_table("nil
+"));
+        assert!(!hl_repl_reports_table(""));
+    }
+
+    #[test]
+    fn class_for_window_id_resolves_hyprland_class() {
+        let clients: Vec<HyprlandClient> = serde_json::from_str(
+            r#"[
+                {"address":"0x1234","class":"foot"},
+                {"address":"0xabcd","class":"firefox"},
+                {"address":"0x9999"}
+            ]"#,
+        )
+        .unwrap();
+        assert_eq!(
+            class_for_window_id(&clients, 0x1234),
+            Some("foot".to_string())
+        );
+        assert_eq!(
+            class_for_window_id(&clients, 0xabcd),
+            Some("firefox".to_string())
+        );
+        assert_eq!(class_for_window_id(&clients, 0x9999), None);
+        assert_eq!(class_for_window_id(&clients, 0xdead), None);
     }
 
     #[test]

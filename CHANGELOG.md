@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Hyprland window focus now tries three strategies in order: the Lua
+  dispatcher (only when the IPC hl global is the API table -- Hyprland
+  0.56.2 ships hl as boolean true, so it is probed once via
+  hyprctl repl type(hl) and skipped when unusable), wlrctl toplevel
+  focus by Wayland app-id resolved from hyprctl clients -j, then the
+  legacy hyprctl dispatch focuswindow. All attempts are reported when
+  every strategy fails.
+
 ## [0.7.7] - 2026-09-30
 
 ### Added
