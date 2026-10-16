@@ -85,7 +85,7 @@ setup does not hold it enabled continuously.
 
 ### Optional foreground accessibility guard
 
-Skip unless: the user explicitly wants GNOME's saved `toolkit-accessibility`
+Skip unless: the architect explicitly wants GNOME's saved `toolkit-accessibility`
 setting kept enabled while desktop automation runs.
 
 Run `computer-use-linux guard-accessibility` in a foreground terminal. It
@@ -122,7 +122,7 @@ Pi native tools skip this MCP `command` config; see [Pi setup](references/pi-set
 2. Begin every desktop-control turn with `get_app_state`, scoped to the app you are working in: pass `app_name_or_bundle_identifier` or a window target (`window_id`, `pid`, `app_id`, `wm_class`, `title`). Without a target the result is the whole desktop AT-SPI tree, `tree_scoped` is `false`, and `message` warns; that can flood context. Use `include_screenshot: false` when the accessibility tree is sufficient. If `accessibility_tree_truncated` is `true`, the tree is incomplete: scope to a narrower target and raise `max_nodes` or `max_depth` (hard caps 2000 and 64) rather than lowering them. The compact readiness block identifies missing setup.
 3. Use `doctor` only when you need the full diagnostic report.
 4. If `can_build_accessibility_tree` is false, run `setup_accessibility` and restart the target app.
-5. If `can_query_windows` is false on GNOME Wayland, run `setup_window_targeting` and ask the user to log out and back in if setup says the shell extension needs a reload.
+5. If `can_query_windows` is false on GNOME Wayland, run `setup_window_targeting` and ask the architect to log out and back in if setup says the shell extension needs a reload.
 6. Before targeted input, call `list_windows` or `focused_window` and verify the intended window by title, app id, pid, or wm class.
 7. Prefer semantic targeting from `get_app_state`: use element indices or role/name/text/states selectors.
 8. Use coordinates only when the UI surface has no useful accessibility tree.
@@ -153,7 +153,7 @@ directly to a window-relative click.
 
 - Already-running GTK, Qt, and Electron apps may need a restart after AT-SPI is enabled.
 - GNOME may show a portal prompt on the first screenshot or `get_app_state` call with screenshots enabled.
-- On GNOME Wayland, the remote-control portal asks on each new `computer-use-linux` process. `COMPUTER_USE_LINUX_PERSIST_REMOTE_DESKTOP=1` in the server environment asks the portal to remember the grant (GNOME starts with the remember box checked). Later processes reuse a single-use restore token stored mode 0600 in the user state directory. Unset is the default and prompts every time. The flag does nothing when ydotool, not the portal, is the input backend.
+- On GNOME Wayland, the remote-control portal asks on each new `computer-use-linux` process. `COMPUTER_USE_LINUX_PERSIST_REMOTE_DESKTOP=1` in the server environment asks the portal to remember the grant (GNOME starts with the remember box checked). Later processes reuse a single-use restore token stored mode 0600 in the architect state directory. Unset is the default and prompts every time. The flag does nothing when ydotool, not the portal, is the input backend.
 - Desktop input is stateful. Avoid concurrent tool calls against this MCP server.
 - Pi serializes the native Computer Use tools and keeps one process for the session. If that process exits, do not replay an ambiguous mutating call; obtain a fresh `get_app_state` before another element-based action.
 - `click`, `drag`, `press_key`, `type_text`, `perform_action`, and `set_value` can change real application state.
