@@ -1,0 +1,396 @@
+{
+  "product": "computer-use-linux",
+  "path": "/home/toxic/pens/ranch/products/computer-use-linux",
+  "files": 68,
+  "detected_at": "2026-10-30T06:11:06.138596Z",
+  "env_vars": {
+    "BIN_NAME": [
+      "install.sh"
+    ],
+    "COMPUTER_USE_LINUX_BIN": [
+      "npm/bin/computer-use-linux.js",
+      "pi/extension/index.ts"
+    ],
+    "COMPUTER_USE_LINUX_COSMIC_HELPER": [
+      "npm/bin/computer-use-linux.js",
+      "pi/extension/index.ts"
+    ],
+    "COMPUTER_USE_LINUX_DOWNLOAD_BASE": [
+      "npm/install.js"
+    ],
+    "COMPUTER_USE_LINUX_ENABLE_SHELL": [
+      "pi/extension/index.ts",
+      "pi/test/bundle-smoke.test.ts"
+    ],
+    "COMPUTER_USE_LINUX_EXTENSION_PATH": [
+      "pi/test/pi-integration.test.ts"
+    ],
+    "COMPUTER_USE_LINUX_LOCAL_BINARY": [
+      "npm/install.js"
+    ],
+    "COMPUTER_USE_LINUX_LOCAL_COSMIC_HELPER": [
+      "npm/install.js"
+    ],
+    "COMPUTER_USE_LINUX_OS_RELEASE_FILE": [
+      "install.sh"
+    ],
+    "COMPUTER_USE_LINUX_SKIP_DOWNLOAD": [
+      "npm/install.js"
+    ],
+    "COMPUTER_USE_LINUX_TEST_BINARY": [
+      "pi/test/bundle-smoke.test.ts",
+      "pi/test/pi-integration.test.ts",
+      "pi/test/shell-environment.integration.test.ts"
+    ],
+    "COMPUTER_USE_LINUX_TEST_DOCTOR_OUTPUT": [
+      "scripts/install_sh_test.sh"
+    ],
+    "COMPUTER_USE_LINUX_TIMEOUT_MS": [
+      "pi/extension/index.ts"
+    ],
+    "COMPUTER_USE_LINUX_UINPUT_DEVICE": [
+      "install.sh"
+    ],
+    "COMPUTER_USE_LINUX_USE_PACKAGED_BINARY": [
+      "pi/test/pi-integration.test.ts"
+    ],
+    "COSMIC_HELPER_INSTALL_PATH": [
+      "install.sh"
+    ],
+    "COSMIC_HELPER_NAME": [
+      "install.sh"
+    ],
+    "CUL_GUARD_TEST_PRIVATE_BUS": [
+      "scripts/accessibility_guard_test.sh"
+    ],
+    "CUL_GUARD_TEST_SCRATCH": [
+      "scripts/accessibility_guard_test.sh"
+    ],
+    "C_BLUE": [
+      "install.sh"
+    ],
+    "C_BOLD": [
+      "install.sh"
+    ],
+    "C_GREEN": [
+      "install.sh"
+    ],
+    "C_RED": [
+      "install.sh"
+    ],
+    "C_RESET": [
+      "install.sh"
+    ],
+    "C_YELLOW": [
+      "install.sh"
+    ],
+    "DISPLAY": [
+      "install.sh"
+    ],
+    "DISTRO_FAMILY": [
+      "install.sh",
+      "scripts/install_sh_test.sh"
+    ],
+    "EXT_SRC_DIR": [
+      "install.sh"
+    ],
+    "EXT_UUID": [
+      "install.sh"
+    ],
+    "FIXTURE_DIR": [
+      "scripts/install_sh_test.sh"
+    ],
+    "FIXTURE_INIT_DELAY_MS": [
+      "pi/test/fixtures/mcp-server.mjs"
+    ],
+    "FIXTURE_VERSION": [
+      "pi/test/fixtures/mcp-server.mjs"
+    ],
+    "FORCE_UNKNOWN_DISTRO": [
+      "install.sh"
+    ],
+    "HOME": [
+      "install.sh"
+    ],
+    "ID_LIKE": [
+      "install.sh"
+    ],
+    "INSTALLER": [
+      "scripts/install_sh_test.sh"
+    ],
+    "INSTALL_DIR": [
+      "install.sh"
+    ],
+    "INSTALL_PATH": [
+      "install.sh",
+      "scripts/install_sh_test.sh"
+    ],
+    "OS_RELEASE_FILE": [
+      "install.sh"
+    ],
+    "PACKAGE_MANAGER_OVERRIDE": [
+      "install.sh"
+    ],
+    "PACKAGE_NAME": [
+      "pi/extension/index.ts"
+    ],
+    "PATH": [
+      "install.sh",
+      "pi/extension/index.ts",
+      "pi/test/mcp-client.test.ts"
+    ],
+    "PI_CODING_AGENT_DIR": [
+      "pi/extension/index.ts"
+    ],
+    "PKG_MANAGER": [
+      "install.sh",
+      "scripts/install_sh_test.sh"
+    ],
+    "PRETTY_NAME": [
+      "install.sh"
+    ],
+    "ROOT_DIR": [
+      "scripts/install_sh_test.sh"
+    ],
+    "SCRIPT_DIR": [
+      "install.sh"
+    ],
+    "SERVICE_NAME": [
+      "gnome-shell-extension/computer-use-linux@avifenesh.dev/extension.js"
+    ],
+    "SESSION_TYPE": [
+      "install.sh"
+    ],
+    "SKIP_ATSPI": [
+      "install.sh"
+    ],
+    "SKIP_BUILD": [
+      "install.sh"
+    ],
+    "SKIP_DOCTOR": [
+      "install.sh"
+    ],
+    "SKIP_GNOME_EXT": [
+      "install.sh"
+    ],
+    "SKIP_RUST": [
+      "install.sh"
+    ],
+    "SKIP_SYSTEM_DEPS": [
+      "install.sh"
+    ],
+    "SKIP_YDOTOOL": [
+      "install.sh"
+    ],
+    "TOOL_PREFIX": [
+      "pi/extension/index.ts"
+    ],
+    "UID": [
+      "install.sh"
+    ],
+    "UINPUT_DEVICE": [
+      "install.sh"
+    ],
+    "WAYLAND_DISPLAY": [
+      "install.sh"
+    ],
+    "X11_KEYBOARD_BACKEND_REQUIRED": [
+      "install.sh",
+      "scripts/install_sh_test.sh"
+    ],
+    "XDG_CURRENT_DESKTOP": [
+      "install.sh"
+    ],
+    "XDG_RUNTIME_DIR": [
+      "install.sh"
+    ],
+    "XDG_SESSION_ID": [
+      "install.sh"
+    ],
+    "XDG_SESSION_TYPE": [
+      "install.sh"
+    ],
+    "actual": [
+      "npm/install.js",
+      "scripts/install_sh_test.sh"
+    ],
+    "actualCosmic": [
+      "npm/install.js"
+    ],
+    "asset": [
+      "npm/install.js"
+    ],
+    "baseUrl": [
+      "npm/install.js"
+    ],
+    "binary": [
+      "npm/bin/computer-use-linux.js"
+    ],
+    "blockers": [
+      "install.sh"
+    ],
+    "built": [
+      "install.sh"
+    ],
+    "capability_verb": [
+      "install.sh"
+    ],
+    "command": [
+      "scripts/zod-check/check.mjs"
+    ],
+    "cosmicAsset": [
+      "npm/install.js"
+    ],
+    "cosmic_helper_built": [
+      "install.sh"
+    ],
+    "current": [
+      "install.sh"
+    ],
+    "desktop": [
+      "install.sh"
+    ],
+    "doctor_output": [
+      "scripts/install_sh_test.sh"
+    ],
+    "expected": [
+      "npm/install.js",
+      "scripts/install_sh_test.sh"
+    ],
+    "expectedCosmic": [
+      "npm/install.js"
+    ],
+    "fake_dir": [
+      "scripts/install_sh_test.sh"
+    ],
+    "field": [
+      "install.sh"
+    ],
+    "height": [
+      "gnome-shell-extension/computer-use-linux@avifenesh.dev/extension.js"
+    ],
+    "hide_jq": [
+      "scripts/install_sh_test.sh"
+    ],
+    "id_like": [
+      "install.sh"
+    ],
+    "keys": [
+      "src/server.rs"
+    ],
+    "len": [
+      "src/server.rs"
+    ],
+    "line": [
+      "install.sh"
+    ],
+    "manager": [
+      "install.sh"
+    ],
+    "maxUnpackedBytes": [
+      "scripts/check_npm_package.mjs"
+    ],
+    "message": [
+      "npm/install.js"
+    ],
+    "mode": [
+      "install.sh"
+    ],
+    "name": [
+      "scripts/install_sh_test.sh"
+    ],
+    "normalized_session_type": [
+      "install.sh"
+    ],
+    "out": [
+      "install.sh"
+    ],
+    "output": [
+      "scripts/install_sh_test.sh"
+    ],
+    "owner": [
+      "install.sh"
+    ],
+    "pack_dir": [
+      "install.sh"
+    ],
+    "path": [
+      "scripts/install_sh_test.sh"
+    ],
+    "pop": [
+      "scripts/semantic_click_test.py"
+    ],
+    "readiness_status": [
+      "install.sh"
+    ],
+    "requestedId": [
+      "gnome-shell-extension/computer-use-linux@avifenesh.dev/extension.js"
+    ],
+    "runtime_dir": [
+      "install.sh"
+    ],
+    "sep": [
+      "pi/scripts/build.mjs"
+    ],
+    "server": [
+      "pi/extension/mcp-client.ts"
+    ],
+    "session_type": [
+      "install.sh"
+    ],
+    "sock": [
+      "install.sh"
+    ],
+    "source": [
+      "npm/install.js"
+    ],
+    "status": [
+      "scripts/install_sh_test.sh"
+    ],
+    "stderr": [
+      "pi/extension/mcp-client.ts"
+    ],
+    "targetArch": [
+      "npm/install.js"
+    ],
+    "test_fn": [
+      "scripts/install_sh_test.sh"
+    ],
+    "tries": [
+      "install.sh"
+    ],
+    "uinput": [
+      "scripts/install_sh_test.sh"
+    ],
+    "unexpected": [
+      "scripts/install_sh_test.sh"
+    ],
+    "unit_dir": [
+      "install.sh"
+    ],
+    "unit_file": [
+      "install.sh"
+    ],
+    "update": [
+      "scripts/semantic_click_test.py"
+    ],
+    "url": [
+      "npm/install.js"
+    ],
+    "user_gid": [
+      "install.sh"
+    ],
+    "wayland_session": [
+      "install.sh"
+    ],
+    "width": [
+      "gnome-shell-extension/computer-use-linux@avifenesh.dev/extension.js"
+    ],
+    "ydotoold_path": [
+      "install.sh"
+    ],
+    "zipfile": [
+      "install.sh"
+    ]
+  }
+}
